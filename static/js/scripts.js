@@ -1,0 +1,1 @@
+console.log("Django Full Running !!!!!")

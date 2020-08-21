@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container">
+	<div class="py-4"></div>
+	<form method="GET">
+		<div class="row">
+			<div class="form-group col-10">
+				<input type="search" class="form-control" placeholder="Informe o nome do cliente,cpf ou email" name="q" value="{{ request.GET.q }}" >
+			</div>
+			<div class="form-group col-2">
+				<button class="form-control btn-success btn-sm"><i class="fas fa-search-plus"></i>&nbsp;Pesquisar</button>
+			</div>
+		
+		</div>
+	</form>
+	
+	<div class="text-center">
+		<h3 class="text-info">Lista de Clientes</h3>
+	</div>
+	<table class="table table-head">
+		<thead>
+			<tr>
+				<th>Nome</th>
+				<th>Email</th>
+				<th>Cpf</th>
+				<th>Data de Criação</th>
+				{% if user.is_authenticated %}
+				<th>Opções</th>
+				<th></th>
+				{% endif %}
+			</tr>
+		</thead>
+		<tbody>
+			{% for cliente in clientes %}
+			<tr>
+				<td>{{ cliente.nome }}</td>
+				<td>{{ cliente.email }}</td>
+				<td>{{ cliente.cpf}}</td>
+				<td>{{ cliente.data_criacao }}</td>
+
+				{% if user.is_authenticated %}
+				<td><a href="/editar_cliente/{{ cliente.id }}" class="btn btn-danger btn-sm"> <i class="far fa-edit"></i>&nbsp;Editar</a></td>
+				<td><a href="/remover_cliente/{{ cliente.id }}"class="btn btn-warning btn-sm"><i class="far fa-trash-alt"></i>&nbsp;Excluir</a></td>
+				{% endif %}
+			</tr>
+			{% endfor %}
+		</tbody>	
+	</table>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if clientes.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ contacts.previous_page_number }}&q={% if request.GET.q %}{% endif %}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ clientes.number }} of {{ clientes.paginator.num_pages }}.
+        </span>
+
+        {% if clientes.has_next %}
+            <a href="?page={{ contacts.next_page_number }}">next</a>
+            <a href="?page={{ contacts.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
+	
+</div>
+
+{% endblock content %}
